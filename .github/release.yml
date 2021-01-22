@@ -1,0 +1,59 @@
+name: release package to PyPI
+
+on:
+  push:
+    branches: [ master ]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.8 
+      - name: Install Dependencies and Package
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install setuptools wheel twine
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          python3 setup.py install
+
+      - name: Verify Uniqueness
+        run: |
+          python3 setup.py --name >> $PACKAGE_NAME
+          python3 setup.py --version >> $PACKAGE_VERSION
+
+      - name: Build Package
+        run: |
+          python3 setup.py sdist bdist_wheel
+
+      - name: Bump version and push tag
+        uses: anothrNick/github-tag-action@1.26.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CUSTOM_TAG: ${{ PACKAGE_VERSION }}
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ PACKAGE_VERSION }}
+          release_name: ${{ PACKAGE_VERSION }}
+          body_path: changelog/${{ PACKAGE_VERSION }}.md
+          draft: false
+          prerelease: false
+
+      - name: Distribute Package to PyPI
+        run: |
+          python3 -m twine upload dist/*
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.TWINE_TOKEN }}
+          TWINE_REPOSITORY: mkdocs-markmap
