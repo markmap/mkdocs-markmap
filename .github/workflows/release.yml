@@ -28,12 +28,6 @@ jobs:
         run: |
           python3 setup.py sdist bdist_wheel
 
-      - name: Bump version and push tag
-        uses: anothrNick/github-tag-action@1.26.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CUSTOM_TAG: ${{ github.ref }}
-
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
