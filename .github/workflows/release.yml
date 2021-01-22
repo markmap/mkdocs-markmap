@@ -36,7 +36,7 @@ jobs:
         uses: anothrNick/github-tag-action@1.26.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CUSTOM_TAG: $PACKAGE_VERSION
+          CUSTOM_TAG: ${{ PACKAGE_VERSION }}
 
       - name: Create Release
         id: create_release
@@ -44,9 +44,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: $PACKAGE_VERSION
-          release_name: $PACKAGE_VERSION
-          body_path: changelog/$PACKAGE_VERSION.md
+          tag_name: ${{ PACKAGE_VERSION }}
+          release_name: ${{ PACKAGE_VERSION }}
+          body_path: changelog/${{ PACKAGE_VERSION }}.md
           draft: false
           prerelease: false
 
