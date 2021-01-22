@@ -25,8 +25,8 @@ jobs:
 
       - name: Verify Uniqueness
         run: |
-          python3 setup.py --name >> $PACKAGE_NAME
-          python3 setup.py --version >> $PACKAGE_VERSION
+          echo "PACKAGE_NAME=$(python3 setup.py --name)" >> $GITHUB_ENV
+          echo "PACKAGE_VERSION=$(python3 setup.py --version)" >> $GITHUB_ENV
 
       - name: Build Package
         run: |
