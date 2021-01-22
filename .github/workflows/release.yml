@@ -14,8 +14,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-        run: |
-          echo ::set-output name=tag::${GITHUB_REF#refs/*/}
       - uses: actions/setup-python@v2
         with:
           python-version: 3.8 
@@ -25,6 +23,7 @@ jobs:
           python3 -m pip install setuptools wheel twine
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
           python3 setup.py install
+          echo ::set-output name=tag::${GITHUB_REF#refs/*/}
 
       - name: Build Package
         run: |
