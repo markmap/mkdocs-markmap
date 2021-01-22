@@ -3,9 +3,7 @@ name: release package to PyPI
 on:
   push:
     tags:
-      - '*'
-
-  workflow_dispatch:
+      - 'v*'
 
 jobs:
   build:
@@ -35,8 +33,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.ref }}
-          release_name: ${GITHUB_REF#refs/*/}
-          body_path: changelog/${GITHUB_REF#refs/*/}.md
+          release_name: ${{ github.ref }}
+          body_path: changelog/${{ github.ref }}.md
           draft: false
           prerelease: false
 
