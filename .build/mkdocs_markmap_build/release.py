@@ -41,7 +41,7 @@ class ReleaseHandler(GithubHandler):
             'tag': self.tag,
             'tag_message': f'Release version {self.tag}',
             'type': 'commit',
-            'tagger': InputGitAuthor(tagger.name, tagger.email, tagger.date),
+            'tagger': InputGitAuthor(tagger.name, tagger.email),
         }
 
         try:
