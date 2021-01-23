@@ -1,9 +1,13 @@
 import sys
 from pprint import pprint
 from typing import Dict, List
+from github.Commit import Commit
+from github.GitAuthor import GitAuthor
+from github.GitCommit import GitCommit
 
 from github.GitRelease import GitRelease
 from github.GitReleaseAsset import GitReleaseAsset
+from github.InputGitAuthor import InputGitAuthor
 
 from .common import AssetCollector, ChangelogLoader, GithubHandler
 
@@ -19,9 +23,16 @@ class ReleaseHandler(GithubHandler):
 
     def create(self, commit: str = None,dry_run: bool = True):
         assets: List[str] = self._collector.get_assets()
+        tagger: GitAuthor = None
 
         if commit is None:
-            commit = self.repository.get_branch(MASTER_BRANCH).commit.sha
+            git_commit: GitCommit = self.repository.get_branch(MASTER_BRANCH).commit.commit
+            commit = git_commit.sha
+            tagger = git_commit.author
+        
+        else:
+            git_commit: GitCommit = self.repository.get_commit(commit)
+            tagger = git_commit.author
 
         parameters: Dict[str, str] = {
             'object': commit,
@@ -29,8 +40,8 @@ class ReleaseHandler(GithubHandler):
             'release_message': self._changelog.get(self.tag),
             'tag': self.tag,
             'tag_message': f'Release version {self.tag}',
-            'tagger': self.repository.owner,
             'type': 'commit',
+            'tagger': InputGitAuthor(tagger.name, tagger.email, tagger.date),
         }
 
         try:
