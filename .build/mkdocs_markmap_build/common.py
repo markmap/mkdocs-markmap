@@ -12,8 +12,6 @@ from github.Repository import Repository
 from mkdocs_markmap.__meta__ import PACKAGE_NAME, PROJECT_NAME, PROJECT_VERSION, REPOSITORY
 
 
-GITHUB_TOKEN: str = os.environ['GITHUB_TOKEN']
-
 PROJECT_PATH: Path = Path(__file__).parent.parent.parent.absolute()
 DIST_PATH: Path = PROJECT_PATH / 'dist'
 CHANGELOG_PATH: Path = PROJECT_PATH / 'changelog'
@@ -25,7 +23,7 @@ WHL_WILDCARD: str = f'{PACKAGE_NAME}-{PROJECT_VERSION}*.whl'
 class GithubHandler(object):
     def __init__(self, tag: str) -> None:
         self.tag = tag
-        self.github: Github = Github(GITHUB_TOKEN)
+        self.github: Github = Github(os.environ['GITHUB_TOKEN'])
         self.repository: Repository = self.github.get_repo(REPOSITORY)
 
 
