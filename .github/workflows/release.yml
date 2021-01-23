@@ -34,5 +34,6 @@ jobs:
 
       - name: Distribute Package to PyPI
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TWINE_PASSWORD: ${{ secrets.TWINE_TOKEN }}
         run: inv distribute
