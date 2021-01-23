@@ -1,6 +1,9 @@
 import os
+from pathlib import Path
 from setuptools import setup, find_packages
 from typing import List
+
+from mkdocs_markmap.__meta__ import PROJECT_NAME, PROJECT_VERSION
 
 
 def readme() -> str:
@@ -9,10 +12,10 @@ def readme() -> str:
         return f.read()
 
 
-def get_requirements(req: str) -> List[str]:
+def get_requirements(filename: str, base_dir: str = 'requirements') -> List[str]:
     """Load list of dependencies."""
     install_requires = []
-    with open(req) as fp:
+    with open(Path(base_dir) / filename) as fp:
         for line in fp:
             stripped_line = line.partition('#')[0].strip()
             if stripped_line:
@@ -28,17 +31,19 @@ long_description = (
 
 
 setup(
-    name='mkdocs-markmap',
-    version='0.1',
+    name=PROJECT_NAME,
+    version=PROJECT_VERSION,
     description='MkDocs plugin and extension to creates mindmaps from markdown using markmap',
     long_description=long_description,
+    long_description_content_type='text/plai',
     keywords='mkdocs python markdown mermaid',
     url='https://github.com/neac0der/mkdocs-markmap',
     author='neatc0der',
     author_email='',
     license='MIT',
     python_requires='>=3.6',
-    install_requires=get_requirements('requirements.txt'),
+    install_requires=get_requirements('prod.txt'),
+    setup_requirements=get_requirements('build.txt'),
     classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',

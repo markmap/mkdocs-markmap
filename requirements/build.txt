@@ -1,0 +1,5 @@
+invoke
+PyGithub
+setuptools>=18.5
+twine
+wheel

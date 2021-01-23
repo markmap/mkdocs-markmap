@@ -12,36 +12,27 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+
+      - name: Prepare Python
+        uses: actions/setup-python@v2
         with:
           python-version: 3.8 
-      - name: Install Dependencies and Package
+
+      - name: Install Dependencies
         run: |
           python3 -m pip install --upgrade pip
-          python3 -m pip install setuptools wheel twine
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          pip install -r requirements/build.txt
           python3 setup.py install
 
       - name: Build Package
-        run: |
-          python3 setup.py sdist bdist_wheel
+        run: inv build
 
       - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: ${{ github.ref }}
-          body_path: changelog/${{ github.ref }}.md
-          draft: false
-          prerelease: false
+        run: inv release --no-dry-run
 
       - name: Distribute Package to PyPI
-        run: |
-          python3 -m twine upload dist/*
         env:
-          TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.TWINE_TOKEN }}
-          TWINE_REPOSITORY: mkdocs-markmap
+        run: inv distribute
