@@ -15,7 +15,6 @@ class DistributionHandler(object):
     def distribute(self):
         assets: List[str] = self._collector.get_assets_from_release()
         os.environ['TWINE_USERNAME'] = '__token__'
-        os.environ['TWINE_REPOSITORY'] = PROJECT_NAME
 
         dispatch(['check', *assets])
 

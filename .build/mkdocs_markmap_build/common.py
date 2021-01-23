@@ -23,7 +23,11 @@ WHL_WILDCARD: str = f'{PACKAGE_NAME}-{PROJECT_VERSION}*.whl'
 class GithubHandler(object):
     def __init__(self, tag: str) -> None:
         self.tag = tag
-        self.github: Github = Github(os.environ['GITHUB_TOKEN'])
+        github_token = os.environ.get('GITHUB_TOKEN')
+        if github_token is None:
+            print('environment variable "GITHUB_TOKEN" is not set')
+            sys.exit(1)
+        self.github: Github = Github(github_token)
         self.repository: Repository = self.github.get_repo(REPOSITORY)
 
 
