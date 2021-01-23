@@ -73,7 +73,6 @@ class ReleaseHandler(GithubHandler):
             print(f'Tag "{self.tag}" does not exist')
 
         else:
-            print(list(self.repository.get_git_refs()))
             self.repository.get_git_ref(f'tags/{self.tag}').delete()
             print(f'Tag "{self.tag}" deleted')
 
