@@ -1,4 +1,4 @@
-name: release package to PyPI
+name: Release Workflow
 
 on:
   push:

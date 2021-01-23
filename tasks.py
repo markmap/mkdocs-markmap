@@ -1,4 +1,3 @@
-import os
 import sys
 from distutils.core import run_setup
 from pathlib import Path

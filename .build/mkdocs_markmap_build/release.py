@@ -1,19 +1,14 @@
-import os
 import sys
-from pathlib import Path
 from pprint import pprint
 from typing import Dict, List
 
 from github.GitRelease import GitRelease
 from github.GitReleaseAsset import GitReleaseAsset
 
-from .common import AssetCollector, ChangelogLoader, GithubHandler, PROJECT_PATH
+from .common import AssetCollector, ChangelogLoader, GithubHandler
 
-
-GITHUB_TOKEN: str = os.environ['GITHUB_TOKEN']
 
 MASTER_BRANCH = 'master'
-
 
 
 class ReleaseHandler(GithubHandler):
