@@ -59,7 +59,7 @@ class AssetDownloader(GithubHandler):
                 sys.exit(1)
 
             file_path: Path = DIST_PATH / asset.name
-            with open(file_path) as fp:
+            with open(file_path, 'wb') as fp:
                 fp.write(response.data)
             
             assets.append(str(file_path))
