@@ -34,7 +34,7 @@ setup(
     version=PROJECT_VERSION,
     description='MkDocs plugin and extension to creates mindmaps from markdown using markmap',
     long_description=long_description,
-    long_description_content_type='text/plai',
+    long_description_content_type='text/plain',
     keywords='mkdocs python markdown mermaid',
     url='https://github.com/neac0der/mkdocs-markmap',
     author='neatc0der',
