@@ -23,18 +23,12 @@ def get_requirements(filename: str, base_dir: str = 'requirements') -> List[str]
     return install_requires
 
 
-long_description = (
-    "This is a mkdocs plugin that introduces support for markmap."
-    "Please follow the instruction in reame to enable this plugin."
-)
-
-
 setup(
     name=PROJECT_NAME,
     version=PROJECT_VERSION,
     description='MkDocs plugin and extension to creates mindmaps from markdown using markmap',
-    long_description=long_description,
-    long_description_content_type='text/plain',
+    long_description=readme(),
+    long_description_content_type='text/markdown',
     keywords='mkdocs python markdown mermaid',
     url='https://github.com/neac0der/mkdocs-markmap',
     author='neatc0der',
