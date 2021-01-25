@@ -2,7 +2,7 @@ from pathlib import Path
 from setuptools import setup, find_packages
 from typing import List
 
-from mkdocs_markmap.__meta__ import PROJECT_NAME, PROJECT_VERSION
+from mkdocs_markmap.__meta__ import PROJECT_NAME, PROJECT_VERSION, REPOSITORY_NAME
 
 
 def readme() -> str:
@@ -23,20 +23,14 @@ def get_requirements(filename: str, base_dir: str = 'requirements') -> List[str]
     return install_requires
 
 
-long_description = (
-    "This is a mkdocs plugin that introduces support for markmap."
-    "Please follow the instruction in reame to enable this plugin."
-)
-
-
 setup(
     name=PROJECT_NAME,
     version=PROJECT_VERSION,
     description='MkDocs plugin and extension to creates mindmaps from markdown using markmap',
-    long_description=long_description,
-    long_description_content_type='text/plain',
+    long_description=readme(),
+    long_description_content_type='text/markdown',
     keywords='mkdocs python markdown mermaid',
-    url='https://github.com/neac0der/mkdocs-markmap',
+    url=f'https://github.com/{REPOSITORY_NAME}',
     author='neatc0der',
     author_email='',
     license='MIT',

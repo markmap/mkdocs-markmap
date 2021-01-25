@@ -1,3 +1,4 @@
+import fnmatch
 import os
 import sys
 from pathlib import Path
@@ -9,15 +10,15 @@ from github import Github
 from github.GitRelease import GitRelease
 from github.Repository import Repository
 
-from mkdocs_markmap.__meta__ import PACKAGE_NAME, PROJECT_NAME, PROJECT_VERSION, REPOSITORY
+from mkdocs_markmap.__meta__ import PACKAGE_NAME, PROJECT_NAME, PROJECT_VERSION, REPOSITORY_NAME
 
 
 PROJECT_PATH: Path = Path(__file__).parent.parent.parent.absolute()
 DIST_PATH: Path = PROJECT_PATH / 'dist'
 CHANGELOG_PATH: Path = PROJECT_PATH / 'changelog'
 
-GZ_WILDCARD: str = f'{PROJECT_NAME}-{PROJECT_VERSION}*.gz'
-WHL_WILDCARD: str = f'{PACKAGE_NAME}-{PROJECT_VERSION}*.whl'
+GZ_WILDCARD: str = f'{PROJECT_NAME}-{{version}}*.gz'
+WHL_WILDCARD: str = f'{PACKAGE_NAME}-{{version}}*.whl'
 
 
 class GithubHandler(object):
@@ -28,23 +29,41 @@ class GithubHandler(object):
             print('environment variable "GITHUB_TOKEN" is not set')
             sys.exit(1)
         self.github: Github = Github(github_token)
-        self.repository: Repository = self.github.get_repo(REPOSITORY)
+        self.repository: Repository = self.github.get_repo(REPOSITORY_NAME)
 
 
 class AssetCollector(object):
-    def get_assets(self) -> List[str]:
-        gz_assets: List[str] = list(str(p) for p in DIST_PATH.glob(GZ_WILDCARD))
-        whl_assets: List[str] = list(str(p) for p in DIST_PATH.glob(WHL_WILDCARD))
+    def __init__(self, tag: str = None) -> None:
+        self.tag = tag
 
-        assert len(gz_assets) == 1, \
-            f'release asset "{GZ_WILDCARD}" is missing in {self.dist_path}: run "inv build" first'
-        assert len(whl_assets) == 1, \
-            f'release asset "{WHL_WILDCARD}" is missing in {self.dist_path}: run "inv build" first'
+        version = PROJECT_VERSION if tag is None else tag[1:]
+        self.gz_wildcard = GZ_WILDCARD.format(version=version)
+        self.whl_wildcard = WHL_WILDCARD.format(version=version)
+
+    def get_assets(self) -> List[str]:
+        gz_assets: List[str] = list(str(p) for p in DIST_PATH.glob(self.gz_wildcard))
+        whl_assets: List[str] = list(str(p) for p in DIST_PATH.glob(self.whl_wildcard))
+
+        help_text = ': run "inv build" first' if self.tag is None else ''
+
+        try:
+            assert len(gz_assets) == 1, \
+                f'release asset "{self.gz_wildcard}" is missing in {DIST_PATH}' + help_text
+            assert len(whl_assets) == 1, \
+                f'release asset "{self.whl_wildcard}" is missing in {DIST_PATH}' + help_text
+
+        except AssertionError as e:
+            print(e)
+            sys.exit(1)
 
         return gz_assets + whl_assets
 
 
 class AssetDownloader(GithubHandler):
+    def __init__(self, tag: str) -> None:
+        super().__init__(tag)
+        self._collector = AssetCollector(tag)
+
     def get_assets_from_release(self) -> List[str]:
         try:
             release: GitRelease = next(r for r in self.repository.get_releases() if r.tag_name == self.tag)
@@ -53,10 +72,16 @@ class AssetDownloader(GithubHandler):
             sys.exit(1)
         
         DIST_PATH.mkdir(exist_ok=True)
-        assets = []
 
         http: PoolManager = PoolManager()
         for asset in release.get_assets():
+            if not any(
+                pattern
+                for pattern in (self._collector.gz_wildcard, self._collector.whl_wildcard)
+                if fnmatch.fnmatch(asset.browser_download_url, pattern)
+            ):
+                continue
+
             response: HTTPResponse = http.request('GET', asset.browser_download_url)
             if response.status != 200:
                 print(f'Download of asset "{asset.name}" failed: {asset.browser_download_url} ({response.status})')
@@ -66,9 +91,7 @@ class AssetDownloader(GithubHandler):
             with open(file_path, 'wb') as fp:
                 fp.write(response.data)
             
-            assets.append(str(file_path))
-        
-        return assets
+        return self._collector.get_assets()
 
 
 class ChangelogLoader:

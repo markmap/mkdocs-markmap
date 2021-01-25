@@ -21,7 +21,8 @@ class ReleaseHandler(GithubHandler):
         self._changelog = ChangelogLoader()
         self._collector = AssetCollector()
 
-    def create(self, commit: str = None,dry_run: bool = True):
+    def create(self, commit: str = None, dry_run: bool = True):
+        release_message: str = self._changelog.get(self.tag)
         assets: List[str] = self._collector.get_assets()
         tagger: GitAuthor = None
 
@@ -37,7 +38,7 @@ class ReleaseHandler(GithubHandler):
         parameters: Dict[str, str] = {
             'object': commit,
             'release_name': self.tag,
-            'release_message': self._changelog.get(self.tag),
+            'release_message': release_message,
             'tag': self.tag,
             'tag_message': f'Release version {self.tag}',
             'type': 'commit',
@@ -59,11 +60,18 @@ class ReleaseHandler(GithubHandler):
             pprint(parameters, width=120)
         
         else:
-            release: GitRelease = self.repository.create_git_tag_and_release(**parameters)
+            release: GitRelease = self.repository.create_git_tag_and_release(**parameters, draft=True)
             print(f'Release "{self.tag}" created: {release.html_url}')
             for asset in assets:
                 release_asset: GitReleaseAsset = release.upload_asset(asset)
                 print(f'Release asset "{release_asset.name}" uploaded: {release_asset.url}')
+
+            release.update_release(
+                name=self.tag,
+                message=release_message,
+                draft=True,
+            )
+            print('Release published')
 
     def delete(self):
         try:
