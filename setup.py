@@ -2,7 +2,7 @@ from pathlib import Path
 from setuptools import setup, find_packages
 from typing import List
 
-from mkdocs_markmap.__meta__ import PROJECT_NAME, PROJECT_VERSION
+from mkdocs_markmap.__meta__ import PROJECT_NAME, PROJECT_VERSION, REPOSITORY_NAME
 
 
 def readme() -> str:
@@ -30,7 +30,7 @@ setup(
     long_description=readme(),
     long_description_content_type='text/markdown',
     keywords='mkdocs python markdown mermaid',
-    url='https://github.com/neac0der/mkdocs-markmap',
+    url=f'https://github.com/{REPOSITORY_NAME}',
     author='neatc0der',
     author_email='',
     license='MIT',

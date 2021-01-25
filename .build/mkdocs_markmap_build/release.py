@@ -65,7 +65,7 @@ class ReleaseHandler(GithubHandler):
             for asset in assets:
                 release_asset: GitReleaseAsset = release.upload_asset(asset)
                 print(f'Release asset "{release_asset.name}" uploaded: {release_asset.url}')
-            
+
             release.update_release(
                 name=self.tag,
                 message=release_message,

@@ -10,7 +10,7 @@ from github import Github
 from github.GitRelease import GitRelease
 from github.Repository import Repository
 
-from mkdocs_markmap.__meta__ import PACKAGE_NAME, PROJECT_NAME, PROJECT_VERSION, REPOSITORY
+from mkdocs_markmap.__meta__ import PACKAGE_NAME, PROJECT_NAME, PROJECT_VERSION, REPOSITORY_NAME
 
 
 PROJECT_PATH: Path = Path(__file__).parent.parent.parent.absolute()
@@ -29,7 +29,7 @@ class GithubHandler(object):
             print('environment variable "GITHUB_TOKEN" is not set')
             sys.exit(1)
         self.github: Github = Github(github_token)
-        self.repository: Repository = self.github.get_repo(REPOSITORY)
+        self.repository: Repository = self.github.get_repo(REPOSITORY_NAME)
 
 
 class AssetCollector(object):
