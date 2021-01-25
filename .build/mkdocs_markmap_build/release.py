@@ -69,7 +69,7 @@ class ReleaseHandler(GithubHandler):
             release = release.update_release(
                 name=self.tag,
                 message=release_message,
-                draft=True,
+                draft=False,
             )
             print(f'Release "{self.tag}" published: {release.html_url}')
 
