@@ -1,0 +1,31 @@
+name: Distribution Workflow
+
+on:
+  release:
+    types:
+      - released
+
+jobs:
+  build:
+    name: Distribute
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Prepare Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8 
+
+      - name: Install Dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          pip install -r requirements/build.txt
+          python3 setup.py install
+
+      - name: Distribute Package to PyPI
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TWINE_PASSWORD: ${{ secrets.TWINE_TOKEN }}
+        run: inv distribute --tag ${GITHUB_REF#refs/*/} --no-dry-run
