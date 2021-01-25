@@ -45,4 +45,4 @@ def distribute(c, tag=TARGET_TAG, dry_run=True):
     print(f'distribute release: {tag}')
 
     handler: DistributionHandler = DistributionHandler(tag)
-    handler.distribute()
+    handler.distribute(dry_run=dry_run)

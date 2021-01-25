@@ -1,13 +1,13 @@
-name: Release Workflow
+name: Distribution Workflow
 
 on:
-  push:
-    branches:
-      - master
+  release:
+    types:
+      - released
 
 jobs:
   build:
-    name: Release
+    name: Distribute
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -24,10 +24,8 @@ jobs:
           pip install -r requirements/build.txt
           python3 setup.py install
 
-      - name: Build Package
-        run: inv build
-
-      - name: Create Release
+      - name: Distribute Package to PyPI
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: inv release --no-dry-run
+          TWINE_PASSWORD: ${{ secrets.TWINE_TOKEN }}
+        run: inv distribute --tag ${GITHUB_REF#refs/*/} --no-dry-run
