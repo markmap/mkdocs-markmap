@@ -7,7 +7,7 @@ from markdown.extensions import Extension
 from markdown.preprocessors import Preprocessor
 
 
-INC_SYNTAX = re.compile(r'\{!\s*(?P<path>.+?)\s*!\}')
+INCLUDE_SYNTAX = re.compile(r'\{!\s*(?P<path>.+?)\s*!\}')
 
 
 class MarkmapPreprocessor(Preprocessor):
@@ -25,7 +25,7 @@ class MarkmapPreprocessor(Preprocessor):
         done: bool = False
         while not done:
             for loc, line in enumerate(lines):
-                match: Optional[re.Match[AnyStr]] = INC_SYNTAX.search(line)
+                match: Optional[re.Match[AnyStr]] = INCLUDE_SYNTAX.search(line)
                 if match is None:
                     continue
 
@@ -42,10 +42,10 @@ class MarkmapPreprocessor(Preprocessor):
                         
                 except Exception as e:
                     print('Warning: could not include file {}. Ignoring statement. Error: {}'.format(path, e))
-                    lines[loc] = INC_SYNTAX.sub('',line)
+                    lines[loc] = INCLUDE_SYNTAX.sub('',line)
                     break
 
-                line_split: List[str] = INC_SYNTAX.split(line)
+                line_split: List[str] = INCLUDE_SYNTAX.split(line)
                 if len(markmap) == 0:
                     markmap.append('')
                 else:
@@ -69,7 +69,7 @@ class MarkmapPreprocessor(Preprocessor):
 
 # todo: replace this functionality with an "include"
 class MarkmapExtension(Extension):
-    def __init__(self, configs: Dict[str, str] = {}):
+    def __init__(self, **configs: Dict[str, str]):
         self.config: Dict[str, str] = {
             'base_path': ['docs', 'Default location from which to evaluate relative paths for the include statement.'],
             'encoding': ['utf-8', 'Encoding of the files used by the include statement.'],
