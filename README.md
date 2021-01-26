@@ -25,9 +25,9 @@ Add this to `mkdocs.yml`:
 
 ```yaml
 markdown_extensions:
-  - markmap:
+  - markmap
 plugins:
-  - markmap:
+  - markmap
 ```
 
 ## Advanced Settings
