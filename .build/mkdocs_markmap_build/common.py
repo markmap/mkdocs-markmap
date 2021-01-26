@@ -78,7 +78,7 @@ class AssetDownloader(GithubHandler):
             if not any(
                 pattern
                 for pattern in (self._collector.gz_wildcard, self._collector.whl_wildcard)
-                if fnmatch.fnmatch(asset.browser_download_url, pattern)
+                if fnmatch.fnmatch(os.path.basename(asset.browser_download_url), pattern)
             ):
                 continue
 

@@ -66,12 +66,12 @@ class ReleaseHandler(GithubHandler):
                 release_asset: GitReleaseAsset = release.upload_asset(asset)
                 print(f'Release asset "{release_asset.name}" uploaded: {release_asset.url}')
 
-            release.update_release(
+            release = release.update_release(
                 name=self.tag,
                 message=release_message,
-                draft=True,
+                draft=False,
             )
-            print('Release published')
+            print(f'Release "{self.tag}" published: {release.html_url}')
 
     def delete(self):
         try:

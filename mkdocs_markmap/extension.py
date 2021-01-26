@@ -67,7 +67,6 @@ class MarkmapPreprocessor(Preprocessor):
         return lines
 
 
-# todo: replace this functionality with an "include"
 class MarkmapExtension(Extension):
     def __init__(self, **configs: Dict[str, str]):
         self.config: Dict[str, str] = {

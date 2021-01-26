@@ -1,3 +1,5 @@
+import re
+from pathlib import Path
 from typing import Dict, Tuple
 
 from bs4 import BeautifulSoup, ResultSet, Tag
@@ -7,6 +9,7 @@ from mkdocs.config.base import Config
 from mkdocs.config.config_options import Type as PluginType
 
 from .defaults import MARKMAP
+from .utils import download
 
 
 # todo: move this to template
@@ -79,10 +82,13 @@ class MarkmapPlugin(BasePlugin):
         soup: BeautifulSoup = BeautifulSoup(output_content, 'html.parser')
         page: Page = kwargs.get('page')
 
+        script_base_url: str = re.sub(r'[^/]+?/', '../', re.sub(r'/+?', '/', page.url)) + 'js/'
+        js_path: Path = Path(config['site_dir']) / 'js'
         markmaps: ResultSet = soup.find_all('code', class_='language-markmap')
         if any(markmaps):
-            for src in self.markmap.values():
-                script: Tag = soup.new_tag('script', src=src, type='text/javascript')  # todo: download static file instead of weblink
+            for script_url in self.markmap.values():
+                src: str = script_base_url + download(js_path, script_url)
+                script: Tag = soup.new_tag('script', src=src, type='text/javascript')
                 soup.head.append(script)
             
             style: Tag = soup.new_tag('style', type='text/css')
