@@ -1,10 +1,11 @@
 import sys
 from pprint import pprint
 from typing import Dict, List
+from time import sleep
+
 from github.Commit import Commit
 from github.GitAuthor import GitAuthor
 from github.GitCommit import GitCommit
-
 from github.GitRelease import GitRelease
 from github.GitReleaseAsset import GitReleaseAsset
 from github.InputGitAuthor import InputGitAuthor
@@ -50,7 +51,6 @@ class ReleaseHandler(GithubHandler):
                 f'tag "{self.tag}" already exists'
             assert self.tag not in (release.tag_name for release in self.repository.get_releases()), \
                 f'release "{self.tag}" already exists'
-
         except AssertionError as e:
             print(e)
             sys.exit(1)
@@ -66,6 +66,10 @@ class ReleaseHandler(GithubHandler):
                 release_asset: GitReleaseAsset = release.upload_asset(asset)
                 print(f'Release asset "{release_asset.name}" uploaded: {release_asset.url}')
 
+             # Give github some time to sort things out with the new release.
+             # Otherwise the "published" event will not be triggered.
+            sleep(5)
+
             release = release.update_release(
                 name=self.tag,
                 message=release_message,
@@ -76,20 +80,16 @@ class ReleaseHandler(GithubHandler):
     def delete(self):
         try:
             next(t for t in self.repository.get_tags() if t.name == self.tag)
-
         except StopIteration:
             print(f'Tag "{self.tag}" does not exist')
-
         else:
             self.repository.get_git_ref(f'tags/{self.tag}').delete()
             print(f'Tag "{self.tag}" deleted')
 
         try:
             release: GitRelease = next(r for r in self.repository.get_releases() if r.tag_name == self.tag)
-
         except StopIteration:
             print(f'Release "{self.tag}" does not exist')
-
         else:
             release.delete_release()
             print(f'Release "{self.tag}" deleted')
