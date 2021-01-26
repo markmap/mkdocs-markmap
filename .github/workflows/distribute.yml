@@ -3,7 +3,7 @@ name: Distribution Workflow
 on:
   release:
     types:
-      - released
+      - published
 
 jobs:
   build:
