@@ -95,9 +95,14 @@ class AssetDownloader(GithubHandler):
 
 
 class ChangelogLoader:
-    def __init__(self, changelog_path: Path = CHANGELOG_PATH) -> None:
-        self._changelog_path = changelog_path
+    def __init__(self, tag: str, changelog_path: Path = CHANGELOG_PATH) -> None:
+        self.tag = tag
+        self._path = changelog_path / f'{self.tag}.md'
     
+    @property
+    def path(self) -> Path:
+        return self._path
+
     def _drop_headline(self, content: str) -> str:
         headline_detected: bool = False
         text_started: bool = False
@@ -122,9 +127,9 @@ class ChangelogLoader:
         
         return '\n'.join(lines)
 
-    def get(self, release: str, drop_headline: bool = True) -> str:
+    def get(self, drop_headline: bool = True) -> str:
         try:
-            with open(self._changelog_path / f'{release}.md', 'r') as fp:
+            with open(self._path, 'r') as fp:
                 content = fp.read()
 
             if drop_headline:
@@ -133,5 +138,5 @@ class ChangelogLoader:
             return content
         
         except OSError as e:
-            print(f'unable to load changelog for release {release}: {e}')
+            print(f'unable to load changelog for release {self.tag}: {e}')
             sys.exit(1)

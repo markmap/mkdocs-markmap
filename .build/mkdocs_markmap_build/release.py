@@ -18,11 +18,11 @@ MASTER_BRANCH = 'master'
 class ReleaseHandler(GithubHandler):
     def __init__(self, tag: str) -> None:
         super(ReleaseHandler, self).__init__(tag)
-        self._changelog = ChangelogLoader()
+        self._changelog = ChangelogLoader(tag)
         self._collector = AssetCollector()
 
     def create(self, commit: str = None, dry_run: bool = True):
-        release_message: str = self._changelog.get(self.tag)
+        release_message: str = self._changelog.get()
         assets: List[str] = self._collector.get_assets()
         tagger: GitAuthor = None
 
