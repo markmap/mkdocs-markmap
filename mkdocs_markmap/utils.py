@@ -2,7 +2,6 @@ import logging
 import os
 from pathlib import Path
 
-from jinja2 import Environment
 from urllib.parse import unquote
 from urllib3 import PoolManager
 from urllib3.response import HTTPResponse
