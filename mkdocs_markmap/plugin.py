@@ -1,3 +1,4 @@
+import logging
 import re
 from pathlib import Path
 from typing import Dict, Tuple
@@ -10,6 +11,9 @@ from mkdocs.config.config_options import Type as PluginType
 
 from .defaults import MARKMAP
 from .utils import download
+
+
+log = logging.getLogger('mkdocs.markmap')
 
 
 # todo: move this to template
@@ -87,7 +91,11 @@ class MarkmapPlugin(BasePlugin):
         markmaps: ResultSet = soup.find_all('code', class_='language-markmap')
         if any(markmaps):
             for script_url in self.markmap.values():
-                src: str = script_base_url + download(js_path, script_url)
+                try:
+                    src: str = script_base_url + download(js_path, script_url)
+                except Exception as e:
+                    log.error(f'unable to download script: {script_url}')
+                    src = script_url
                 script: Tag = soup.new_tag('script', src=src, type='text/javascript')
                 soup.head.append(script)
             

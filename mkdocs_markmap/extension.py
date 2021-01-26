@@ -1,10 +1,14 @@
-from pathlib import Path
+import logging
 import re
+from pathlib import Path
 from typing import AnyStr, Dict, List, Optional
 
 from markdown import Markdown
 from markdown.extensions import Extension
 from markdown.preprocessors import Preprocessor
+
+
+log = logging.getLogger('mkdocs.markmap')
 
 
 INCLUDE_SYNTAX = re.compile(r'\{!\s*(?P<path>.+?)\s*!\}')
@@ -41,7 +45,7 @@ class MarkmapPreprocessor(Preprocessor):
                         markmap: List[str] = r.readlines()
                         
                 except Exception as e:
-                    print('Warning: could not include file {}. Ignoring statement. Error: {}'.format(path, e))
+                    log.error('unable to include file {}. Ignoring statement. Error: {}'.format(path, e))
                     lines[loc] = INCLUDE_SYNTAX.sub('',line)
                     break
 
