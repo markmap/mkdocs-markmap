@@ -1,5 +1,7 @@
 # mkdocs-markmap
 
+> Beautiful and simple mindmaps written in markdown.
+
 This is a plugin and an extension for [mkdocs](https://github.com/mkdocs/mkdocs/) to add [markmap](https://github.com/gera2ld/markmap).
 
 ## Prerequisits
@@ -9,7 +11,7 @@ This plugin was tested with, but is not limited to:
 * Python 3.8
 * mkdocs 1.1
 
-## How to integrate this?
+## Quickstart
 
 ### Install
 
@@ -20,6 +22,17 @@ pip install mkdocs-markmap
 ### Configure
 
 Add this to `mkdocs.yml`:
+
+```yaml
+markdown_extensions:
+  - markmap:
+plugins:
+  - markmap:
+```
+
+## Advanced Settings
+
+There are more options available for `mkdocs.yml` (shown values are defaults):
 
 ```yaml
 markdown_extensions:
@@ -43,7 +56,7 @@ extra_javascript:
   - https://unpkg.com/markmap-view@0.2.1/dist/index.min.js
 ```
 
-:warning: The urls needs contain one of these keywords to be considered as deviation from default:
+:warning: The urls need to contain one of these keywords to be considered as deviation from default:
 
 * `d3`
 * `markmap-lib`
@@ -81,7 +94,7 @@ Look at this beautiful mindmap:
 {!mindmap.mm.md!}
 ```
 
-But you _do_ need the plugin for that. Thus, don't forget to follow the setup example above.
+But you _do_ need the plugin for that. Thus, don't forget to follow the quickstart example above.
 
 ## Credits :clap:
 

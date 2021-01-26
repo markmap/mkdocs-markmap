@@ -1,3 +1,4 @@
+import logging
 import re
 from pathlib import Path
 from typing import Dict, Tuple
@@ -7,43 +8,18 @@ from mkdocs.plugins import BasePlugin
 from mkdocs.structure.pages import Page
 from mkdocs.config.base import Config
 from mkdocs.config.config_options import Type as PluginType
+from mkdocs.utils import copy_file
 
 from .defaults import MARKMAP
 from .utils import download
 
 
-# todo: move this to template
-SCRIPT_CONTENT = """
-const markdown{index} = '{content}';
-const svg{index} = document.querySelector('#{tag_id}');
-const root{index} = markmap_transformer.transform(markdown{index}).root;
-var m{index} = markmap.Markmap.create(svg{index}, null, root{index});
+log = logging.getLogger('mkdocs.markmap')
 
-m{index}.rescale(1).then(function() {{
-    svg{index}.parentElement.style.height = (svg{index}.getBBox().height + 10) + "px";
-    setTimeout(function() {{
-        // todo: this is a dirty workaround to center the mindmap within svg
-        while (svg{index}.firstChild) {{
-            svg{index}.removeChild(svg{index}.lastChild);
-        }}
-        m{index} = markmap.Markmap.create(svg{index}, null, root{index});
-    }}, 500);
-}});
-"""
 
-# todo: move this to static file
-STYLE_CONTENT = """
-div.markmap {
-    width: 100%;
-    min-height: 1em;
-    border: 1px solid grey;
-}
-.markmap > svg {
-    width: 100%;
-    height: 100%;
-}
-"""
-
+TEMPLATES_PATH: Path = Path(__file__).parent / 'templates'
+STYLE_PATH: Path = TEMPLATES_PATH / 'mkdocs-markmap.css'
+SCRIPT_PATH: Path = TEMPLATES_PATH / 'mkdocs-markmap.js'
 
 class MarkmapPlugin(BasePlugin):
     """
@@ -78,42 +54,52 @@ class MarkmapPlugin(BasePlugin):
 
         return self._markmap
 
+    def _load_scripts(self, soup: BeautifulSoup, script_base_url: str, js_path: Path) -> None:
+        for script_url in self.markmap.values():
+            try:
+                src: str = script_base_url + download(js_path, script_url)
+            except Exception as e:
+                log.error(f'unable to download script: {script_url}')
+                src = script_url
+            
+            script: Tag = soup.new_tag('script', src=src, type='text/javascript')
+            soup.head.append(script)
+
+    @staticmethod
+    def _add_statics(soup: BeautifulSoup):
+        statics = (
+            (STYLE_PATH, 'style', 'text/css', 'head'),
+            (SCRIPT_PATH, 'script', 'text/javascript', 'body'),
+        )
+
+        for path, tag_name, text_type, attribute in statics:
+            tag: Tag = soup.new_tag(tag_name, type=text_type)
+            with open(path, 'r') as fp:
+                tag.string = fp.read()
+            getattr(soup, attribute).append(tag)    
+
     def on_post_page(self, output_content: str, config: Config, **kwargs) -> str:
         soup: BeautifulSoup = BeautifulSoup(output_content, 'html.parser')
         page: Page = kwargs.get('page')
 
+        markmaps: ResultSet = soup.find_all('code', class_='language-markmap')
+        if not any(markmaps):
+            return output_content
+
         script_base_url: str = re.sub(r'[^/]+?/', '../', re.sub(r'/+?', '/', page.url)) + 'js/'
         js_path: Path = Path(config['site_dir']) / 'js'
-        markmaps: ResultSet = soup.find_all('code', class_='language-markmap')
-        if any(markmaps):
-            for script_url in self.markmap.values():
-                src: str = script_base_url + download(js_path, script_url)
-                script: Tag = soup.new_tag('script', src=src, type='text/javascript')
-                soup.head.append(script)
-            
-            style: Tag = soup.new_tag('style', type='text/css')
-            style.string = STYLE_CONTENT
-            soup.head.append(style)
-
-            script: Tag = soup.new_tag('script')
-            script.string = 'const markmap_transformer = new markmap.Transformer();'
-            soup.head.append(script)
+        self._load_scripts(soup, script_base_url, js_path)
+        self._add_statics(soup)
 
         for index, markmap in enumerate(markmaps):
             tag_id: str = f'markmap-{index}'
             markmap.parent.name = 'div'
-            markmap.parent['class'] = markmap.parent.get('class', []) + ['markmap']
+            markmap.parent['class'] = markmap.parent.get('class', []) + ['mkdocs-markmap']
+            markmap.parent['data-markdown']=markmap.text.replace('\n', '&#10;')
             markmap.replaceWith(soup.new_tag(
                 'svg', 
                 id=tag_id, 
                 attrs={'class': 'markmap'},
             ))
-            script: Tag = soup.new_tag('script')
-            script.string = SCRIPT_CONTENT.format(
-                index=index,
-                tag_id=tag_id,
-                content=markmap.text.replace('\n', '\\n'),
-            )
-            soup.body.append(script)
 
         return str(soup)

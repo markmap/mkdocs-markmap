@@ -1,0 +1,28 @@
+name: Verification Workflow
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: Distribute
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Prepare Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8 
+
+      - name: Install Dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          pip install -r requirements/build.txt
+          python3 setup.py install
+
+      - name: Verify Integrity
+        run: inv verify

@@ -8,11 +8,22 @@ PROJECT_PATH: Path = Path(__file__).parent.absolute()
 sys.path.insert(0, str(PROJECT_PATH / '.build'))
 
 from mkdocs_markmap.__meta__ import PROJECT_VERSION
+from mkdocs_markmap_build.common import ChangelogLoader
 from mkdocs_markmap_build.distribution import DistributionHandler
 from mkdocs_markmap_build.release import ReleaseHandler
 
 
 TARGET_TAG = f'v{PROJECT_VERSION}'
+
+
+@task
+def verify(c, tag=TARGET_TAG):
+    print('verify integrity: {tag}')
+
+    changelog = ChangelogLoader(tag)
+    if not changelog.path.exists():
+        print(f'change log for release is missing: {tag}')
+        sys.exit(1)
 
 
 @task

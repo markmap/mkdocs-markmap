@@ -1,10 +1,16 @@
+import logging
 import os
 from pathlib import Path
+
+from jinja2 import Environment
 from urllib.parse import unquote
 from urllib3 import PoolManager
 from urllib3.response import HTTPResponse
 from urllib3.util.retry import Retry
 from urllib3.util.url import Url, parse_url
+
+
+log = logging.getLogger('mkdocs.markmap')
 
 
 def download(base_path: Path, url: str, flat: bool = False, force_reload: bool = False) -> str:
@@ -20,5 +26,7 @@ def download(base_path: Path, url: str, flat: bool = False, force_reload: bool =
         response: HTTPResponse = http.request('GET', url)
         with open(file_path, 'wb') as fp:
             fp.write(response.data)
+
+    log.info(f'script downloaded: {url}')
 
     return str(sub_path)
