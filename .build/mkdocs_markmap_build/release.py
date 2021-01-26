@@ -77,6 +77,19 @@ class ReleaseHandler(GithubHandler):
             )
             print(f'Release "{self.tag}" published: {release.html_url}')
 
+    def verify(self):
+        try:
+            next(r for r in self.repository.get_releases() if r.tag_name == self.tag)
+        except StopIteration:
+            pass
+        else:
+            print(f'release already exists: {self.tag}')
+            sys.exit(1)
+
+        if not self._changelog.path.exists():
+            print(f'change log for release is missing: {self.tag}')
+            sys.exit(1)
+
     def delete(self):
         try:
             next(t for t in self.repository.get_tags() if t.name == self.tag)
