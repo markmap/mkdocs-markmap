@@ -1,4 +1,5 @@
 import logging
+from mkdocs_markmap.extension import MarkmapExtension
 import re
 from pathlib import Path
 from typing import Dict, Tuple
@@ -8,7 +9,6 @@ from mkdocs.plugins import BasePlugin
 from mkdocs.structure.pages import Page
 from mkdocs.config.base import Config
 from mkdocs.config.config_options import Type as PluginType
-from mkdocs.utils import copy_file
 
 from .defaults import MARKMAP
 from .utils import download
@@ -30,6 +30,9 @@ class MarkmapPlugin(BasePlugin):
             (f'{name}_version', PluginType(str, default=module.version))
             for name, module in MARKMAP.items()
         ),
+        ('base_path', PluginType(str, default='docs')),
+        ('encoding', PluginType(str, default='utf-8')),
+        ('file_extension', PluginType(str, default='.mm.md')),
     )
 
     def __init__(self):
@@ -77,6 +80,16 @@ class MarkmapPlugin(BasePlugin):
             with open(path, 'r') as fp:
                 tag.string = fp.read()
             getattr(soup, attribute).append(tag)    
+
+    def on_config(self, config: Config) -> Config:
+        config['markdown_extensions'].append('markmap')
+        config['mdx_configs']['markmap'] = {
+            key: value
+            for key, value in config['plugins'].get('markmap').config.items()
+            if key in MarkmapExtension.config_defaults
+        }
+
+        return config
 
     def on_post_page(self, output_content: str, config: Config, **kwargs) -> str:
         soup: BeautifulSoup = BeautifulSoup(output_content, 'html.parser')

@@ -72,12 +72,14 @@ class MarkmapPreprocessor(Preprocessor):
 
 
 class MarkmapExtension(Extension):
+    config_defaults: Dict[str, str] = {
+        'base_path': ['docs', 'Default location from which to evaluate relative paths for the include statement.'],
+        'encoding': ['utf-8', 'Encoding of the files used by the include statement.'],
+        'file_extension': ['.mm.md', 'File extension of mindmap files'],
+    }
+
     def __init__(self, **configs: Dict[str, str]):
-        self.config: Dict[str, str] = {
-            'base_path': ['docs', 'Default location from which to evaluate relative paths for the include statement.'],
-            'encoding': ['utf-8', 'Encoding of the files used by the include statement.'],
-            'file_extension': ['.mm.md', 'File extension of mindmap files'],
-        }
+        self.config: Dict[str, str] = self.config_defaults
         for key, value in configs.items():
             self.setConfig(key, value)
 
