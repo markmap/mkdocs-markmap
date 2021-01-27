@@ -24,8 +24,6 @@ pip install mkdocs-markmap
 Add this to `mkdocs.yml`:
 
 ```yaml
-markdown_extensions:
-  - markmap
 plugins:
   - markmap
 ```
@@ -36,12 +34,11 @@ There are more options available for `mkdocs.yml` (shown values are defaults):
 
 ```yaml
 markdown_extensions:
+plugins:
   - markmap:
       base_path: docs
       encoding: utf-8
       file_extension: .mm.md
-plugins:
-  - markmap:
       d3_version: 6.3.1
       lib_version: 0.11.1
       view_version: 0.2.1
@@ -61,40 +58,6 @@ extra_javascript:
 * `d3`
 * `markmap-lib`
 * `markmap-view`
-
-## Wait, what?! Do I need an extension or a plugin? :unamused:
-
-_Q: What does the plugin do?_
-
-A: It supports code blocks of markdown as follows:
-
-````markdown
-```markmap
-# Root
-
-## Branch 1
-
-* Branchlet 1a
-* Branchlet 1b
-
-## Branch 2
-
-* Branchlet 2a
-* Branchlet 2b
-```
-````
-
-_Q: What does the extension do?_
-
-A: Well, having such a support is nice, but huge mindmap blocks might be annoying within your tidy markdown files. That is why the extension provides an addition to the markdown syntax. It includes files whereever you need them to be:
-
-```markdown
-Look at this beautiful mindmap:
-
-{!mindmap.mm.md!}
-```
-
-But you _do_ need the plugin for that. Thus, don't forget to follow the quickstart example above.
 
 ## Credits :clap:
 
