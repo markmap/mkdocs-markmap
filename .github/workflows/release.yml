@@ -32,4 +32,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           inv release --no-dry-run
-          inv latest --github
+          inv info --github
