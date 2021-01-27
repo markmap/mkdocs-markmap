@@ -49,6 +49,12 @@ setup(
         'Programming Language :: Python :: 3.9',
     ],
     packages=find_packages(exclude=['*.tests']),
+    package_dir={
+        'mkdocs_markmap': 'mkdocs_markmap',
+    },
+    package_data={
+        'mkdocs_markmap': ['static_files/*'],
+    },
     entry_points={
         'mkdocs.plugins': [
             'markmap = mkdocs_markmap.plugin:MarkmapPlugin',
