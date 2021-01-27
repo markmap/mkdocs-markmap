@@ -54,7 +54,7 @@ This plugin supports code blocks of markdown as follows:
 ```
 ````
 
-It can also make use of file includes whereever you need them to be:
+It can also make use of file includes to keep your markdown tidy:
 
 ```markdown
 Look at this beautiful mindmap:
