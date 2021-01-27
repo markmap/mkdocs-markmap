@@ -34,6 +34,34 @@ plugins:
   - markmap
 ```
 
+## Usage
+
+This plugin supports code blocks of markdown as follows:
+
+````markdown
+```markmap
+# Root
+
+## Branch 1
+
+* Branchlet 1a
+* Branchlet 1b
+
+## Branch 2
+
+* Branchlet 2a
+* Branchlet 2b
+```
+````
+
+It can also make use of file includes whereever you need them to be:
+
+```markdown
+Look at this beautiful mindmap:
+
+{!mindmap.mm.md!}
+```
+
 ## Advanced Settings
 
 There are more options available for `mkdocs.yml` (shown values are defaults):
