@@ -33,7 +33,6 @@ plugins:
 There are more options available for `mkdocs.yml` (shown values are defaults):
 
 ```yaml
-markdown_extensions:
 plugins:
   - markmap:
       base_path: docs
