@@ -20,10 +20,8 @@ TARGET_TAG = f'v{PROJECT_VERSION}'
 def verify(c, tag=TARGET_TAG):
     print('verify integrity: {tag}')
 
-    changelog = ChangelogLoader(tag)
-    if not changelog.path.exists():
-        print(f'change log for release is missing: {tag}')
-        sys.exit(1)
+    handler: ReleaseHandler = ReleaseHandler(tag)
+    handler.verify()
 
 
 @task
