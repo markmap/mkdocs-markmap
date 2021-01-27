@@ -8,8 +8,8 @@ PROJECT_PATH: Path = Path(__file__).parent.absolute()
 sys.path.insert(0, str(PROJECT_PATH / '.build'))
 
 from mkdocs_markmap.__meta__ import PROJECT_VERSION
-from mkdocs_markmap_build.common import ChangelogLoader
 from mkdocs_markmap_build.distribution import DistributionHandler
+from mkdocs_markmap_build.info import ReleaseInfo
 from mkdocs_markmap_build.release import ReleaseHandler
 
 
@@ -47,6 +47,20 @@ def release(c, commit=None, tag=TARGET_TAG, dry_run=True):
 
     handler: ReleaseHandler = ReleaseHandler(tag)
     handler.create(commit, dry_run=dry_run)
+
+
+@task
+def info(c, tag=None, github=False, pypi=False):
+    if tag is None: 
+        print('show latest release info')
+    else:
+        print(f'show release info: {tag}')
+
+    print_github = github or not (github or pypi)
+    print_pypi = pypi or not (github or pypi)
+
+    release: ReleaseInfo = ReleaseInfo(tag)
+    release.print(github=print_github, pypi=print_pypi)
 
 
 @task
