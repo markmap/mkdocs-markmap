@@ -2,6 +2,12 @@
 
 > Beautiful and simple mindmaps written in markdown.
 
+[![MIT license](https://badgen.net/github/license/neatc0der/mkdocs-markmap)](https://github.com/neatc0der/mkdocs-markmap/blob/master/LICENSE)
+[![PyPI](https://badgen.net/pypi/v/mkdocs-markmap)](https://pypi.org/project/mkdocs-markmap/)
+[![Latest Release](https://badgen.net/github/release/neatc0der/mkdocs-markmap/latest)](https://github.com/neatc0der/mkdocs-markmap/releases/latest)
+[![Open Issues](https://badgen.net/github/open-issues/neatc0der/mkdocs-markmap)](https://github.com/neatc0der/mkdocs-markmap/issues)
+[![Open PRs](https://badgen.net/github/open-prs/neatc0der/mkdocs-markmap)](https://github.com/neatc0der/mkdocs-markmap/pulls)
+
 This is a plugin and an extension for [mkdocs](https://github.com/mkdocs/mkdocs/) to add [markmap](https://github.com/gera2ld/markmap).
 
 ## Prerequisits
