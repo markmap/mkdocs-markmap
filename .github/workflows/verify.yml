@@ -25,4 +25,6 @@ jobs:
           python3 setup.py install
 
       - name: Verify Integrity
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: inv verify
