@@ -9,16 +9,10 @@
         root = markmap_transformer.transform(content).root;
         m = markmap.Markmap.create(svg, null, root);
 
-        // todo: this is a dirty workaround to center the mindmap within svg
         (function(obj, e, r) {
             obj.rescale(1).then(function() {
                 e.parentElement.style.height = (e.getBBox().height + 10) + "px";
-                setTimeout(function() {
-                    while (e.firstChild) {
-                        e.removeChild(e.lastChild);
-                    }
-                    markmap.Markmap.create(e, null, r);
-                }, 500);
+                requestAnimationFrame(() => { obj.fit(); })
             });
         })(m, svg, root);
     }

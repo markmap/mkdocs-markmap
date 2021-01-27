@@ -17,9 +17,9 @@ from .utils import download
 log = logging.getLogger('mkdocs.markmap')
 
 
-TEMPLATES_PATH: Path = Path(__file__).parent / 'templates'
-STYLE_PATH: Path = TEMPLATES_PATH / 'mkdocs-markmap.css'
-SCRIPT_PATH: Path = TEMPLATES_PATH / 'mkdocs-markmap.js'
+STATICS_PATH: Path = Path(__file__).parent / 'static_files'
+STYLE_PATH: Path = STATICS_PATH / 'mkdocs-markmap.css'
+SCRIPT_PATH: Path = STATICS_PATH / 'mkdocs-markmap.js'
 
 class MarkmapPlugin(BasePlugin):
     """
