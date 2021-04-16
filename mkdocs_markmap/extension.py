@@ -27,6 +27,7 @@ class MarkmapPreprocessor(Preprocessor):
 
     def run(self, lines: List[str]) -> List[str]:
         done: bool = False
+        included_paths: List[Path] = []
         while not done:
             for loc, line in enumerate(lines):
                 match: Optional[re.Match[AnyStr]] = INCLUDE_SYNTAX.search(line)
@@ -38,8 +39,13 @@ class MarkmapPreprocessor(Preprocessor):
                     continue
 
                 if not path.is_absolute():
-                    path = (Path(self.base_path) / path).absolute()
+                    path = (Path(self.base_path) / path).resolve()
 
+                if path in included_paths:
+                    log.warning(f"loop detected while including: {path}")
+                    continue
+
+                included_paths.append(path)
                 try:
                     with open(path, 'r', encoding=self.encoding) as r:
                         markmap: List[str] = r.readlines()
