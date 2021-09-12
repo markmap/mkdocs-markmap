@@ -3,7 +3,6 @@ import os
 from pathlib import Path
 
 from urllib.parse import unquote
-import requests
 from requests.adapters import HTTPAdapter
 from requests import Response
 from requests.packages.urllib3.util.retry import Retry
