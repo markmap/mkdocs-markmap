@@ -18,7 +18,7 @@ TARGET_TAG = f'v{PROJECT_VERSION}'
 
 @task
 def verify(c, tag=TARGET_TAG):
-    print('verify integrity: {tag}')
+    print(f'verify integrity: {tag}')
 
     handler: ReleaseHandler = ReleaseHandler(tag)
     handler.verify()
