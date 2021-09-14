@@ -3,10 +3,11 @@ import os
 from pathlib import Path
 
 from urllib.parse import unquote
-from urllib3 import PoolManager
-from urllib3.response import HTTPResponse
-from urllib3.util.retry import Retry
-from urllib3.util.url import Url, parse_url
+from requests.adapters import HTTPAdapter
+from requests import Response
+from requests.packages.urllib3.util.retry import Retry
+from requests.packages.urllib3.util.url import Url, parse_url
+from requests.sessions import Session
 
 
 log = logging.getLogger('mkdocs.markmap')
@@ -19,12 +20,18 @@ def download(base_path: Path, url: str, flat: bool = False, force_reload: bool =
     file_path: Path = base_path / sub_path
 
     file_path.parent.mkdir(parents=True, exist_ok=True)
-    retries = Retry(connect=5, read=2, redirect=5)
-    http = PoolManager(retries=retries)
     if force_reload or not file_path.exists():
-        response: HTTPResponse = http.request('GET', url)
+        retries: Retry = Retry(connect=5, read=2, redirect=5)
+        adapter: HTTPAdapter = HTTPAdapter(max_retries=retries)
+        http: Session = Session()
+        http.mount("https://", adapter)
+        http.mount("http://", adapter)
+
+        response: Response = http.get(url, allow_redirects=True, timeout=3.0)
         with open(file_path, 'wb') as fp:
-            fp.write(response.data)
+            for chunk in response.iter_content(chunk_size=1024): 
+                if chunk:
+                    fp.write(chunk)
 
     log.info(f'script downloaded: {url}')
 
