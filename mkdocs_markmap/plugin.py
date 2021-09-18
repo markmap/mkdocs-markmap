@@ -95,8 +95,9 @@ class MarkmapPlugin(BasePlugin):
         soup: BeautifulSoup = BeautifulSoup(output_content, 'html.parser')
         page: Page = kwargs.get('page')
 
-        markmaps: ResultSet = soup.find_all('code', class_='language-markmap')
+        markmaps: ResultSet = soup.find_all(class_='language-markmap')
         if not any(markmaps):
+            log.info(f"no markmap found: {page.file.name}")
             return output_content
 
         script_base_url: str = re.sub(r'[^/]+?/', '../', re.sub(r'/+?', '/', page.url)) + 'js/'
@@ -105,11 +106,20 @@ class MarkmapPlugin(BasePlugin):
         self._add_statics(soup)
 
         for index, markmap in enumerate(markmaps):
+            markmap: Tag
             tag_id: str = f'markmap-{index}'
-            markmap.parent.name = 'div'
-            markmap.parent['class'] = markmap.parent.get('class', []) + ['mkdocs-markmap']
-            markmap.parent['data-markdown']=markmap.text.replace('\n', '&#10;')
-            markmap.replaceWith(soup.new_tag(
+            pre: Tag
+            code: Tag
+            if markmap.name == 'pre':
+                pre = markmap
+                code = markmap.findChild('code')
+            else:
+                pre = markmap.parent
+                code = markmap
+            pre.name = 'div'
+            pre['class'] = pre.get('class', []) + ['mkdocs-markmap']
+            pre['data-markdown'] = code.text.replace('\n', '&#10;')
+            code.replaceWith(soup.new_tag(
                 'svg', 
                 id=tag_id, 
                 attrs={'class': 'markmap'},
