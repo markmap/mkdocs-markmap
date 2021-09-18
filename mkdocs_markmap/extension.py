@@ -1,5 +1,6 @@
 import logging
 import re
+from functools import partial
 from pathlib import Path
 from typing import AnyStr, Dict, List, Optional
 
@@ -91,3 +92,19 @@ class MarkmapExtension(Extension):
 
     def extendMarkdown(self, md: Markdown, md_globals: Dict[str, str]) -> None:
         md.preprocessors.register(MarkmapPreprocessor(md, self.getConfigs()), 'include_markmap', 102)
+        for extension in md.registeredExtensions:
+            if extension.__class__.__name__ == 'SuperFencesCodeExtension':
+                try:
+                    from pymdownx.superfences import default_validator, fence_code_format, _formatter, _validator
+                    extension.extend_super_fences(
+                        'markmap',
+                        partial(_formatter, class_name='language-markmap', _fmt=fence_code_format),
+                        partial(_validator, validator=default_validator, _legacy=False)
+                    )
+                    break
+
+                except ImportError as e:
+                    log.warning(f'detected pymdownx.superfences, but import is not working: {e}')
+
+                except Exception as e:
+                    log.error(f'unexpected error: {e}')
