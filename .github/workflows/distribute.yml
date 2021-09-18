@@ -1,10 +1,9 @@
 name: Distribution Workflow
 
 on:
+  workflow_dispatch:
   release:
-    types:
-      - published
-      - released
+    types: [published, released]
 
 jobs:
   build:
