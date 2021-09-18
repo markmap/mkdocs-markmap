@@ -3,7 +3,7 @@ name: Distribution Workflow
 on:
   workflow_dispatch:
   release:
-    types: [published, created]
+    types: [published, released]
 
 jobs:
   build:
