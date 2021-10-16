@@ -37,6 +37,7 @@ class MarkmapPlugin(BasePlugin):
 
     def __init__(self):
         self._markmap: Dict[str, str] = None
+        self._found_markmap: bool = False
 
     @property
     def markmap(self) -> Dict[str, str]:
@@ -91,19 +92,23 @@ class MarkmapPlugin(BasePlugin):
 
         return config
 
-    def on_post_page(self, output_content: str, config: Config, **kwargs) -> str:
-        soup: BeautifulSoup = BeautifulSoup(output_content, 'html.parser')
-        page: Page = kwargs.get('page')
-
-        markmaps: ResultSet = soup.find_all(class_='language-markmap')
-        if not any(markmaps):
+    def on_post_page(self, html: str, page: Page, config: Config, **kwargs) -> str:
+        if not self._found_markmap:
             log.info(f"no markmap found: {page.file.name}")
-            return output_content
+            return html
 
+        soup: BeautifulSoup = BeautifulSoup(html, 'html.parser')
         script_base_url: str = re.sub(r'[^/]+?/', '../', re.sub(r'/+?', '/', page.url)) + 'js/'
         js_path: Path = Path(config['site_dir']) / 'js'
         self._load_scripts(soup, script_base_url, js_path)
         self._add_statics(soup)
+
+        return str(soup)
+
+    def on_page_content(self, html: str, **kwargs) -> str:
+        soup: BeautifulSoup = BeautifulSoup(html, 'html.parser')
+        markmaps: ResultSet = soup.find_all(class_='language-markmap')
+        self._found_markmap: bool = any(markmaps)
 
         for index, markmap in enumerate(markmaps):
             markmap: Tag
