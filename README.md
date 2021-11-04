@@ -92,6 +92,15 @@ extra_javascript:
 * `markmap-lib`
 * `markmap-view`
 
+
+## Troubleshooting
+
+### Markmaps ending up in nav menu
+
+1. Move your markmap files to a separate folger next to `docs`, e.g. `mindmaps`
+2. Configure `base_path` accordingly (see above)
+
+
 ## Credits :clap:
 
 Some of the development approaches are based on implementations provided by the following projects:
