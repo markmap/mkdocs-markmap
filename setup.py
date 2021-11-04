@@ -36,7 +36,6 @@ setup(
     license='MIT',
     python_requires='>=3.6',
     install_requires=get_requirements('prod.txt'),
-    setup_requirements=get_requirements('build.txt'),
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
