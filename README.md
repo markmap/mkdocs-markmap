@@ -95,10 +95,10 @@ extra_javascript:
 
 ## Troubleshooting
 
-### Markmaps ending up in nav menu
+### Nav tree lists markmaps
 
-1. Move your markmap files to a separate folger next to `docs`, e.g. `mindmaps`
-2. Configure `base_path` accordingly (see above)
+1. Move your markmap files to a separate folder next to `docs`, e.g. `mindmaps`
+2. Configure `base_path` accordingly (see [Advanced Settings](#advanced-settings))
 
 
 ## Credits :clap:
