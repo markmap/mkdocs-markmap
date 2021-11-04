@@ -94,17 +94,18 @@ class MarkmapExtension(Extension):
         md.preprocessors.register(MarkmapPreprocessor(md, self.getConfigs()), 'include_markmap', 102)
         for extension in md.registeredExtensions:
             if extension.__class__.__name__ == 'SuperFencesCodeExtension':
+                log.info(f'superfences detected by markmap')
                 try:
                     from pymdownx.superfences import default_validator, fence_code_format, _formatter, _validator
                     extension.extend_super_fences(
                         'markmap',
                         partial(_formatter, class_name='language-markmap', _fmt=fence_code_format),
-                        partial(_validator, validator=default_validator, _legacy=False)
+                        partial(_validator, validator=default_validator)
                     )
                     break
 
                 except ImportError as e:
-                    log.warning(f'detected pymdownx.superfences, but import is not working: {e}')
+                    log.warning(f'markmap detected pymdownx.superfences, but import is not working: {e}')
 
                 except Exception as e:
                     log.error(f'unexpected error: {e}')
