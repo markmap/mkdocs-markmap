@@ -37,7 +37,6 @@ class MarkmapPlugin(BasePlugin):
 
     def __init__(self):
         self._markmap: Dict[str, str] = None
-        self._found_markmap: bool = False
 
     @property
     def markmap(self) -> Dict[str, str]:
@@ -93,7 +92,7 @@ class MarkmapPlugin(BasePlugin):
         return config
 
     def on_post_page(self, html: str, page: Page, config: Config, **kwargs) -> str:
-        if not self._found_markmap:
+        if not getattr(page, '_found_markmap', False):
             log.info(f"no markmap found: {page.file.name}")
             return html
 
@@ -105,10 +104,10 @@ class MarkmapPlugin(BasePlugin):
 
         return str(soup)
 
-    def on_page_content(self, html: str, **kwargs) -> str:
+    def on_page_content(self, html: str, page: Page, **kwargs) -> str:
         soup: BeautifulSoup = BeautifulSoup(html, 'html.parser')
         markmaps: ResultSet = soup.find_all(class_='language-markmap')
-        self._found_markmap: bool = any(markmaps)
+        setattr(page, '_found_markmap', any(markmaps))
 
         for index, markmap in enumerate(markmaps):
             markmap: Tag
