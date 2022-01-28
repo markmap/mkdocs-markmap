@@ -88,7 +88,7 @@ extra_javascript:
 
 :warning: The urls need to contain one of these keywords to be considered as deviation from default:
 
-* `d3`
+* `markmap-d3`
 * `markmap-lib`
 * `markmap-view`
 
