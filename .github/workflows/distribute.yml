@@ -28,4 +28,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TWINE_PASSWORD: ${{ secrets.TWINE_TOKEN }}
+          MASTODON_TOKEN: ${{ secrets.MASTODON_TOKEN }}
         run: inv distribute --tag v$(python setup.py --version 2> /dev/null) --no-dry-run
