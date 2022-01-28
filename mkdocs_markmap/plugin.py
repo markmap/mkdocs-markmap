@@ -7,7 +7,7 @@ from typing import Dict, Tuple
 from bs4 import BeautifulSoup, ResultSet, Tag
 from mkdocs.plugins import BasePlugin
 from mkdocs.structure.pages import Page
-from mkdocs.config.base import Config
+from mkdocs.config.base import Config, load_config
 from mkdocs.config.config_options import Type as PluginType
 
 from .defaults import MARKMAP
@@ -20,6 +20,7 @@ log = logging.getLogger('mkdocs.markmap')
 STATICS_PATH: Path = Path(__file__).parent / 'static_files'
 STYLE_PATH: Path = STATICS_PATH / 'mkdocs-markmap.css'
 SCRIPT_PATH: Path = STATICS_PATH / 'mkdocs-markmap.js'
+
 
 class MarkmapPlugin(BasePlugin):
     """
@@ -59,10 +60,15 @@ class MarkmapPlugin(BasePlugin):
 
     def _load_scripts(self, soup: BeautifulSoup, script_base_url: str, js_path: Path) -> None:
         for script_url in self.markmap.values():
-            try:
-                src: str = script_base_url + download(js_path, script_url)
-            except Exception as e:
-                log.error(f'unable to download script: {script_url}')
+            if script_url.lower().startswith("http"):
+                try:
+                    src: str = script_base_url + download(js_path, script_url)
+                except Exception as e:
+                    log.error(f'unable to download script: {script_url}')
+                    src = script_url
+
+            else:
+                log.info(f"static script detected: {script_url}")
                 src = script_url
             
             script: Tag = soup.new_tag('script', src=src, type='text/javascript')
@@ -88,6 +94,7 @@ class MarkmapPlugin(BasePlugin):
             for key, value in config['plugins'].get('markmap').config.items()
             if key in MarkmapExtension.config_defaults
         }
+        self.config['extra_javascript'] = config.get('extra_javascript', [])
 
         return config
 
