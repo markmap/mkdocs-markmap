@@ -92,7 +92,6 @@ extra_javascript:
 * `markmap-lib`
 * `markmap-view`
 
-
 ## Troubleshooting
 
 ### Nav tree lists markmaps
@@ -100,6 +99,22 @@ extra_javascript:
 1. Move your markmap files to a separate folder next to `docs`, e.g. `mindmaps`
 2. Configure `base_path` accordingly (see [Advanced Settings](#advanced-settings))
 
+### Static javascript files not working
+
+1. Ensure naming of javascript files matches the scheme (see [Advanced Settings](#advanced-settings))
+2. Copy all javascript files to `doc/js/`, otherwise `mkdocs` will not copy static files to `site/`
+3. Define all files in `extra_javascript`, e.g.
+
+```yaml
+extra_javascript:
+  - js/markmap-d3.js
+  - js/markmap-lib.js
+  - js/markmap-view.js
+```
+
+### Usage of proxy is prevent download of javascript files
+
+Usually proxies should be supported by `requests`, which is used for downloading all required javascript files. If the issue remains, try downloading the files yourself and store them accordingly (see [Static javascript files not working](#static-javascript-files-not-working))
 
 ## Credits :clap:
 
