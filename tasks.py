@@ -8,7 +8,7 @@ PROJECT_PATH: Path = Path(__file__).parent.absolute()
 sys.path.insert(0, str(PROJECT_PATH / '.build'))
 
 from mkdocs_markmap.__meta__ import PROJECT_VERSION
-from mkdocs_markmap_build.distribution import DistributionHandler
+from mkdocs_markmap_build.distribution import DistributionHandler, MastodonHandler
 from mkdocs_markmap_build.info import ReleaseInfo
 from mkdocs_markmap_build.release import ReleaseHandler
 
@@ -64,6 +64,14 @@ def info(c, tag=None, github=False, pypi=False):
 
 
 @task
+def mastodon(c, tag=TARGET_TAG):
+    print(f'post status: {tag}')
+
+    handler: MastodonHandler = MastodonHandler(tag)
+    handler.post()
+
+
+@task(post=[mastodon])
 def distribute(c, tag=TARGET_TAG, dry_run=True):
     print(f'distribute release: {tag}')
 

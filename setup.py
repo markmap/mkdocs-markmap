@@ -2,7 +2,7 @@ from pathlib import Path
 from setuptools import setup, find_packages
 from typing import List
 
-from mkdocs_markmap.__meta__ import PROJECT_NAME, PROJECT_VERSION, REPOSITORY_NAME
+from mkdocs_markmap.__meta__ import PROJECT_NAME, PROJECT_VERSION, REPOSITORY_URL
 
 
 def readme() -> str:
@@ -30,7 +30,7 @@ setup(
     long_description=readme(),
     long_description_content_type='text/markdown',
     keywords='mkdocs python markdown markmap mindmap include',
-    url=f'https://github.com/{REPOSITORY_NAME}',
+    url=REPOSITORY_URL,
     author='neatc0der',
     author_email='',
     license='MIT',
