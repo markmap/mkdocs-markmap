@@ -90,7 +90,7 @@ class MarkmapExtension(Extension):
         for key, value in configs.items():
             self.setConfig(key, value)
 
-    def extendMarkdown(self, md: Markdown, md_globals: Dict[str, str]) -> None:
+    def extendMarkdown(self, md: Markdown) -> None:
         md.preprocessors.register(MarkmapPreprocessor(md, self.getConfigs()), 'include_markmap', 102)
         for extension in md.registeredExtensions:
             if extension.__class__.__name__ == 'SuperFencesCodeExtension':

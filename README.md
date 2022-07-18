@@ -15,7 +15,7 @@ This is a plugin and an extension for [mkdocs](https://github.com/mkdocs/mkdocs/
 This plugin was tested with, but is not limited to:
 
 * Python 3.9
-* mkdocs 1.1
+* mkdocs 1.3
 
 ## Quickstart
 
@@ -112,7 +112,7 @@ extra_javascript:
   - js/markmap-view.js
 ```
 
-### Usage of proxy is prevent download of javascript files
+### Usage of proxy is preventing download of javascript files
 
 Usually proxies should be supported by `requests`, which is used for downloading all required javascript files. If the issue remains, try downloading the files yourself and store them accordingly (see [Static javascript files not working](#static-javascript-files-not-working))
 
