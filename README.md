@@ -15,7 +15,7 @@ This is a plugin and an extension for [mkdocs](https://github.com/mkdocs/mkdocs/
 This plugin was tested with, but is not limited to:
 
 * Python 3.9
-* mkdocs 1.1
+* mkdocs 1.3
 
 ## Quickstart
 
