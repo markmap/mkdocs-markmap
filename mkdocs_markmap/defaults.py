@@ -14,12 +14,12 @@ D3_LIB: JsModuleConfig = JsModuleConfig(
 )
 
 MARKMAP_LIB: JsModuleConfig = JsModuleConfig(
-    version='0.11.6',
+    version='0.14.1',
     uri='https://unpkg.com/markmap-lib@{}/dist/browser/index.min.js',
 )
 
 MARKMAP_VIEW: JsModuleConfig = JsModuleConfig(
-    version='0.2.6',
+    version='0.14.0',
     uri='https://unpkg.com/markmap-view@{}/dist/index.min.js',
 )
 

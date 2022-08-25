@@ -2,13 +2,13 @@
 
 > Beautiful and simple mindmaps written in markdown.
 
-[![MIT license](https://badgen.net/github/license/neatc0der/mkdocs-markmap)](https://github.com/neatc0der/mkdocs-markmap/blob/master/LICENSE)
+[![MIT license](https://badgen.net/github/license/markmap/mkdocs-markmap)](https://github.com/markmap/mkdocs-markmap/blob/master/LICENSE)
 [![PyPI](https://badgen.net/pypi/v/mkdocs-markmap)](https://pypi.org/project/mkdocs-markmap/)
-[![Latest Release](https://badgen.net/github/release/neatc0der/mkdocs-markmap/latest)](https://github.com/neatc0der/mkdocs-markmap/releases/latest)
-[![Open Issues](https://badgen.net/github/open-issues/neatc0der/mkdocs-markmap)](https://github.com/neatc0der/mkdocs-markmap/issues)
-[![Open PRs](https://badgen.net/github/open-prs/neatc0der/mkdocs-markmap)](https://github.com/neatc0der/mkdocs-markmap/pulls)
+[![Latest Release](https://badgen.net/github/release/markmap/mkdocs-markmap/latest)](https://github.com/markmap/mkdocs-markmap/releases/latest)
+[![Open Issues](https://badgen.net/github/open-issues/markmap/mkdocs-markmap)](https://github.com/markmap/mkdocs-markmap/issues)
+[![Open PRs](https://badgen.net/github/open-prs/markmap/mkdocs-markmap)](https://github.com/markmap/mkdocs-markmap/pulls)
 
-This is a plugin and an extension for [mkdocs](https://github.com/mkdocs/mkdocs/) to add [markmap](https://github.com/gera2ld/markmap).
+This is a plugin and an extension for [mkdocs](https://github.com/mkdocs/mkdocs/) to add [markmap](https://github.com/markmap/markmap).
 
 ## Prerequisits
 
@@ -73,8 +73,8 @@ plugins:
       encoding: utf-8
       file_extension: .mm.md
       d3_version: 6.7.0
-      lib_version: 0.11.6
-      view_version: 0.2.6
+      lib_version: 0.14.1
+      view_version: 0.14.0
 ```
 
 In addition, feel free to define your favourite source urls like this:
@@ -82,8 +82,8 @@ In addition, feel free to define your favourite source urls like this:
 ```yaml
 extra_javascript:
   - https://unpkg.com/d3@6.7.0/dist/d3.min.js
-  - https://unpkg.com/markmap-lib@0.11.6/dist/browser/index.min.js
-  - https://unpkg.com/markmap-view@0.2.6/dist/index.min.js
+  - https://unpkg.com/markmap-lib@0.14.1/dist/browser/index.min.js
+  - https://unpkg.com/markmap-view@0.14.0/dist/index.min.js
 ```
 
 :warning: The urls need to contain one of these keywords to be considered as deviation from default:
@@ -120,6 +120,6 @@ Usually proxies should be supported by `requests`, which is used for downloading
 
 Some of the development approaches are based on implementations provided by the following projects:
 
-* [markmap](https://github.com/gera2ld/markmap) (key feature of this project)
+* [markmap](https://github.com/markmap/markmap) (key feature of this project)
 * [markdown-include](https://github.com/cmacmackin/markdown-include) (basis for extension support)
 * [mkdocs-mermaid2-plugin](https://github.com/fralau/mkdocs-mermaid2-plugin) (basis for plugin support)
