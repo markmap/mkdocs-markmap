@@ -73,8 +73,8 @@ plugins:
       encoding: utf-8
       file_extension: .mm.md
       d3_version: 6.7.0
-      lib_version: 0.11.6
-      view_version: 0.2.6
+      lib_version: 0.14.1
+      view_version: 0.14.0
 ```
 
 In addition, feel free to define your favourite source urls like this:
