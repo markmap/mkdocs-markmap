@@ -82,8 +82,8 @@ In addition, feel free to define your favourite source urls like this:
 ```yaml
 extra_javascript:
   - https://unpkg.com/d3@6.7.0/dist/d3.min.js
-  - https://unpkg.com/markmap-lib@0.11.6/dist/browser/index.min.js
-  - https://unpkg.com/markmap-view@0.2.6/dist/index.min.js
+  - https://unpkg.com/markmap-lib@0.14.1/dist/browser/index.min.js
+  - https://unpkg.com/markmap-view@0.14.0/dist/index.min.js
 ```
 
 :warning: The urls need to contain one of these keywords to be considered as deviation from default:
