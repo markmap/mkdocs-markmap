@@ -2,7 +2,7 @@ from pathlib import Path
 from setuptools import setup, find_packages
 from typing import List
 
-from mkdocs_markmap.__meta__ import PROJECT_NAME, PROJECT_VERSION, REPOSITORY_URL
+from mkdocs_markmap.__meta__ import OWNER, PROJECT_NAME, PROJECT_VERSION, REPOSITORY_URL
 
 
 def readme() -> str:
@@ -31,10 +31,10 @@ setup(
     long_description_content_type='text/markdown',
     keywords='mkdocs python markdown markmap mindmap include',
     url=REPOSITORY_URL,
-    author='neatc0der',
+    author=OWNER,
     author_email='',
     license='MIT',
-    python_requires='>=3.6',
+    python_requires='>=3.7',
     install_requires=get_requirements('prod.txt'),
     classifiers=[
         'Development Status :: 5 - Production/Stable',
@@ -42,10 +42,10 @@ setup(
         'Intended Audience :: Information Technology',
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
     ],
     packages=find_packages(exclude=['*.tests']),
     package_dir={
