@@ -5,8 +5,11 @@
         var el, content, svg, root, m;
         for (var i = 0; i < markmaps.length; i++) {
             el = markmaps[i];
-            content = el.getAttribute('data-markdown').replaceAll('&#10;', '\n');
             svg = el.querySelector('svg');
+            if (svg) continue;
+            content = el.textContent;
+            el.innerHTML = '<svg>';
+            svg = el.firstChild;
             root = markmap_transformer.transform(content).root;
             m = markmap.Markmap.create(svg, null, root);
 

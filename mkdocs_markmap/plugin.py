@@ -1,14 +1,15 @@
 import logging
-from mkdocs_markmap.extension import MarkmapExtension
-import re
 from pathlib import Path
+import re
 from typing import Dict, Tuple
 
 from bs4 import BeautifulSoup, ResultSet, Tag
-from mkdocs.plugins import BasePlugin
-from mkdocs.structure.pages import Page
+
 from mkdocs.config.base import Config, load_config
 from mkdocs.config.config_options import Type as PluginType
+from mkdocs.plugins import BasePlugin
+from mkdocs.structure.pages import Page
+from mkdocs_markmap.extension import MarkmapExtension
 
 from .defaults import MARKMAP
 from .utils import download
@@ -123,11 +124,7 @@ class MarkmapPlugin(BasePlugin):
                 code = markmap
             pre.name = 'div'
             pre['class'] = pre.get('class', []) + ['mkdocs-markmap']
-            pre['data-markdown'] = code.text.replace('\n', '&#10;')
-            code.replaceWith(soup.new_tag(
-                'svg', 
-                id=tag_id, 
-                attrs={'class': 'markmap'},
-            ))
+            code.name = 'script'
+            code['type'] = 'text/template'
 
         return str(soup)
