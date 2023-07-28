@@ -44,16 +44,10 @@ class MarkmapPlugin(BasePlugin):
         """
         Provides all markmap libraries defined in mkdocs.yml (if any)
         """
-        if self._markmap is None:            
-            extra_javascript = self.config.get('extra_javascript', [])
+        if self._markmap is None:
             self._markmap: Dict[str, str] = {}
-            for uri in extra_javascript:
-                for name in MARKMAP.keys():
-                    if f'markmap-{name}' in uri.lower():
-                        self._markmap[name] = uri
-
             for name, module in MARKMAP.items():
-                if name not in self._markmap:
+                if self.config[f'{name}_version']:
                     self._markmap[name] = module.uri.format(self.config[f'{name}_version'])
 
         return self._markmap
@@ -62,7 +56,7 @@ class MarkmapPlugin(BasePlugin):
         for script_url in self.markmap.values():
             if script_url.lower().startswith("http"):
                 try:
-                    src: str = script_base_url + download(js_path, script_url)
+                    src: str = script_base_url + download(js_path, script_url, extname='.js')
                 except Exception as e:
                     log.error(f'unable to download script: {script_url}')
                     src = script_url
@@ -70,7 +64,7 @@ class MarkmapPlugin(BasePlugin):
             else:
                 log.info(f"static script detected: {script_url}")
                 src = script_url
-            
+
             script: Tag = soup.new_tag('script', src=src, type='text/javascript')
             soup.head.append(script)
 
@@ -85,7 +79,7 @@ class MarkmapPlugin(BasePlugin):
             tag: Tag = soup.new_tag(tag_name, type=text_type)
             with open(path, 'r') as fp:
                 tag.string = fp.read()
-            getattr(soup, attribute).append(tag)    
+            getattr(soup, attribute).append(tag)
 
     def on_config(self, config: Config) -> Config:
         config['markdown_extensions'].append('markmap')

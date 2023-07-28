@@ -9,8 +9,8 @@ class JsModuleConfig(object):
     uri: str = attr.attrib()
 
 D3_LIB: JsModuleConfig = JsModuleConfig(
-    version='6.7.0',
-    uri='https://unpkg.com/d3@{}/dist/d3.min.js',
+    version='7',
+    uri='https://unpkg.com/d3@{}',
 )
 
 MARKMAP_LIB: JsModuleConfig = JsModuleConfig(
