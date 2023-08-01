@@ -72,25 +72,26 @@ plugins:
       base_path: docs
       encoding: utf-8
       file_extension: .mm.md
-      d3_version: 6.7.0
-      lib_version: 0.14.1
-      view_version: 0.14.0
+      d3_version: 7
+      lib_version: 0.15.3
+      view_version: 0.15.3
 ```
 
 In addition, feel free to define your favourite source urls like this:
 
 ```yaml
+plugins:
+  - markmap:
+      # disable the default assets first
+      d3_version: ''
+      lib_version: ''
+      view_version: ''
+
 extra_javascript:
-  - https://unpkg.com/d3@6.7.0/dist/d3.min.js
-  - https://unpkg.com/markmap-lib@0.14.1/dist/browser/index.min.js
-  - https://unpkg.com/markmap-view@0.14.0/dist/index.min.js
+  - https://unpkg.com/d3@7/dist/d3.min.js
+  - https://unpkg.com/markmap-lib@0.15.3/dist/browser/index.js
+  - https://unpkg.com/markmap-view@0.15.3/dist/browser/index.js
 ```
-
-:warning: The urls need to contain one of these keywords to be considered as deviation from default:
-
-* `markmap-d3`
-* `markmap-lib`
-* `markmap-view`
 
 ## Troubleshooting
 

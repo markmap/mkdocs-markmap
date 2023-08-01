@@ -9,23 +9,23 @@ class JsModuleConfig(object):
     uri: str = attr.attrib()
 
 D3_LIB: JsModuleConfig = JsModuleConfig(
-    version='6.7.0',
-    uri='https://unpkg.com/d3@{}/dist/d3.min.js',
+    version="7",
+    uri="https://unpkg.com/d3@{}",
 )
 
 MARKMAP_LIB: JsModuleConfig = JsModuleConfig(
-    version='0.14.1',
-    uri='https://unpkg.com/markmap-lib@{}/dist/browser/index.min.js',
+    version="0.15.4",
+    uri="https://unpkg.com/markmap-lib@{}",
 )
 
 MARKMAP_VIEW: JsModuleConfig = JsModuleConfig(
-    version='0.14.0',
-    uri='https://unpkg.com/markmap-view@{}/dist/index.min.js',
+    version="0.15.4",
+    uri="https://unpkg.com/markmap-view@{}",
 )
 
 
 MARKMAP: Dict[str, JsModuleConfig] = {
-    'd3': D3_LIB,
-    'lib': MARKMAP_LIB,
-    'view': MARKMAP_VIEW,
+    "d3": D3_LIB,
+    "lib": MARKMAP_LIB,
+    "view": MARKMAP_VIEW,
 }
