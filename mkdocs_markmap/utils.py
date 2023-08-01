@@ -10,14 +10,14 @@ from requests.packages.urllib3.util.url import Url, parse_url
 from requests.sessions import Session
 
 
-log = logging.getLogger('mkdocs.markmap')
+log = logging.getLogger("mkdocs.markmap")
 
 
-def download(base_path: Path, url: str, flat: bool = False, force_reload: bool = False, extname: str = '') -> str:
+def download(base_path: Path, url: str, flat: bool = False, force_reload: bool = False, extname: str = "") -> str:
     parsed_url: Url = parse_url(url)
-    path: str = unquote(parsed_url.request_uri.split('?')[0])
-    sub_path: str = os.path.basename(path) if flat else f'{parsed_url.hostname}{path}'
-    if extname != '' and not sub_path.endswith(extname):
+    path: str = unquote(parsed_url.request_uri.split("?")[0])
+    sub_path: str = os.path.basename(path) if flat else f"{parsed_url.hostname}{path}"
+    if extname and not sub_path.endswith(extname):
         sub_path += extname
     file_path: Path = base_path / sub_path
 
@@ -31,11 +31,11 @@ def download(base_path: Path, url: str, flat: bool = False, force_reload: bool =
         http.mount("http://", adapter)
 
         response: Response = http.get(url, allow_redirects=True, timeout=3.0)
-        with open(file_path, 'wb') as fp:
+        with open(file_path, "wb") as fp:
             for chunk in response.iter_content(chunk_size=1024): 
                 if chunk:
                     fp.write(chunk)
 
-    log.info(f'script downloaded: {url}')
+    log.info(f"script downloaded: {url}")
 
     return str(sub_path)
