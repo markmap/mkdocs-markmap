@@ -94,7 +94,7 @@ class MarkmapExtension(Extension):
         md.preprocessors.register(MarkmapPreprocessor(md, self.getConfigs()), "include_markmap", 102)
         for extension in md.registeredExtensions:
             if extension.__class__.__name__ == "SuperFencesCodeExtension":
-                log.info(f"superfences detected by markmap")
+                log.debug(f"superfences detected by markmap")
                 try:
                     from pymdownx.superfences import default_validator, fence_code_format, _formatter, _validator
                     extension.extend_super_fences(
