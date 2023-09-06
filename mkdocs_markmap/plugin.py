@@ -97,11 +97,12 @@ class MarkmapPlugin(BasePlugin):
 
     def on_post_page(self, html: str, page: Page, config: Config, **kwargs) -> str:
         if not getattr(page, "_found_markmap", False):
-            log.info(f"no markmap found: {page.file.name}")
+            log.debug(f"no markmap found: {page.file.name}")
             return html
 
+        log.info(f"markmap found: {page.file.name}")
         soup: BeautifulSoup = BeautifulSoup(html, "html.parser")
-        script_base_url: str = re.sub(r"[^/]+?/", "../", re.sub(r"/+?", "/", page.url)) + "js/"
+        script_base_url: str = re.sub(r"/[^/]*$", "/", re.sub(r"[^/]+?/", "../", re.sub(r"/+?", "/", page.url))) + "js/"
         js_path: Path = Path(config["site_dir"]) / "js"
         self._load_scripts(soup, script_base_url, js_path)
         self._add_statics(soup)
