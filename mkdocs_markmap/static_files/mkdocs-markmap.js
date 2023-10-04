@@ -38,25 +38,25 @@
         });
     }
 
-    function updateMarkmaps() {
-        const markmaps = document.getElementsByClassName('mkdocs-markmap');
-        for (var i = 0; i < markmaps.length; i++) {
-            const el = markmaps[i];
+    function updateMarkmaps(node) {
+        for (const el of node.querySelectorAll('.mkdocs-markmap')) {
             renderMarkmap(el);
         }
     }
 
     loading.then(() => {
-        var MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
-        var observer = new MutationObserver(function(mutations) {
-            updateMarkmaps();
+        const observer = new MutationObserver((mutationList) => {
+            for (const mutation of mutationList) {
+                if (mutation.type === 'childList') {
+                    for (const node of mutation.addedNodes) {
+                        updateMarkmaps(node);
+                    }
+                }
+            }
         });
 
-        var target = document.getElementById('mkdocs-decrypted-content');
-        if (undefined != target) {
-            observer.observe(target, { childList: true });
-        }
+        observer.observe(document.body, { childList: true });
 
-        updateMarkmaps();
+        updateMarkmaps(document);
     });
 })();
