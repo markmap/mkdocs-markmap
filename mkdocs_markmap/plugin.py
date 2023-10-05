@@ -127,7 +127,7 @@ class MarkmapPlugin(BasePlugin):
                 code = markmap
             pre.name = "div"
             pre["class"] = pre.get("class", []) + ["mkdocs-markmap"]
-            code.name = "script"
-            code["type"] = "text/template"
+            code.name = "markmap-data"
+            code.attrs["hidden"] = "true"
 
         return str(soup)
