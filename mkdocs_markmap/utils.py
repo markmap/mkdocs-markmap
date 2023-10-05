@@ -21,6 +21,8 @@ def download(base_path: Path, url: str, flat: bool = False, force_reload: bool =
         sub_path += extname
     file_path: Path = base_path / sub_path
 
+    if file_path.exists():
+        return str(sub_path)
 
     file_path.parent.mkdir(parents=True, exist_ok=True)
     if force_reload or not file_path.exists():
