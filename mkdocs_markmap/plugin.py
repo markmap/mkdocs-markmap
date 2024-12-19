@@ -1,14 +1,15 @@
+import base64
 import logging
 from pathlib import Path
 import re
 from typing import Dict, Tuple
 
 from bs4 import BeautifulSoup, ResultSet, Tag
-
 from mkdocs.config.base import Config, load_config
 from mkdocs.config.config_options import Type as PluginType
 from mkdocs.plugins import BasePlugin
 from mkdocs.structure.pages import Page
+
 from mkdocs_markmap.extension import MarkmapExtension
 
 from .defaults import MARKMAP
@@ -116,7 +117,6 @@ class MarkmapPlugin(BasePlugin):
 
         for index, markmap in enumerate(markmaps):
             markmap: Tag
-            tag_id: str = f"markmap-{index}"
             pre: Tag
             code: Tag
             if markmap.name == "pre":
@@ -129,5 +129,9 @@ class MarkmapPlugin(BasePlugin):
             pre["class"] = pre.get("class", []) + ["mkdocs-markmap"]
             code.name = "markmap-data"
             code.attrs["hidden"] = "true"
+            if not code.attrs.get("encoding"):
+                # Encode content as base64 to avoid being handled by other plugins like KaTeX
+                code.attrs["encoding"] = "base64"
+                code.string = base64.b64encode(code.get_text().strip().encode()).decode()
 
         return str(soup)
