@@ -1,9 +1,10 @@
 (function initializeMarkmap() {
     const transformer = new markmap.Transformer();
+    const preloadAssets = transformer.getPreloadScripts();
     const assets = transformer.getAssets();
     const loading = Promise.all([
         assets.styles && markmap.loadCSS(assets.styles),
-        assets.scripts && markmap.loadJS(assets.scripts),
+        markmap.loadJS([...preloadAssets.scripts, ...assets.scripts]),
     ]);
 
     function parseData(content) {
@@ -19,8 +20,9 @@
     }
 
     function resetMarkmap(m, el) {
-        const { minX, maxX, minY, maxY } = m.state;
-        const height = (el.clientWidth * (maxX - minX)) / (maxY - minY);
+        if (!m.state.rect) return;
+        const { x1, y1, x2, y2 } = m.state.rect;
+        const height = (el.offsetWidth / (x2 - x1)) * (y2 - y1);
         el.style.height = height + "px";
         m.fit();
     }
@@ -44,11 +46,9 @@
         el.innerHTML = "<svg>";
         svg = el.firstChild;
         const { root, options } = parseData(content);
-        const m = markmap.Markmap.create(svg, options, root);
-        resetMarkmap(m, el);
-        transformer.hooks.retransform.tap(() => {
-            const { root, options } = parseData(content);
-            m.setData(root, options);
+        const m = markmap.Markmap.create(svg, options);
+        m.setData(root);
+        requestAnimationFrame(() => {
             resetMarkmap(m, el);
         });
     }
