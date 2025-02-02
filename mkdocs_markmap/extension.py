@@ -1,3 +1,4 @@
+import base64
 import logging
 import re
 from functools import partial
@@ -48,30 +49,31 @@ class MarkmapPreprocessor(Preprocessor):
 
                 included_paths.append(path)
                 try:
-                    with open(path, "r", encoding=self.encoding) as r:
-                        markmap: List[str] = r.readlines()
-                        
+                    markmap: str = path.read_text(encoding=self.encoding)
+
                 except Exception as e:
                     log.error("unable to include file {}. Ignoring statement. Error: {}".format(path, e))
                     lines[loc] = INCLUDE_SYNTAX.sub("",line)
                     break
 
                 line_split: List[str] = INCLUDE_SYNTAX.split(line)
+                output: List[str] = []
                 if len(markmap) == 0:
-                    markmap.append("")
+                    output.append("")
                 else:
-                    markmap.insert(0, "```markmap")
-                    markmap.append("```")
-                
+                    output.append('<pre class="language-markmap"><code encoding="base64">')
+                    output.append(base64.b64encode(markmap.encode()).decode())
+                    output.append("</code></pre>")
+
                 if line_split[0].strip() != "":
-                    markmap.insert(0, line_split[0])
+                    output.insert(0, line_split[0])
 
                 if line_split[2].strip() != "":
-                    markmap.append(line_split[2])
+                    output.append(line_split[2])
 
-                lines = lines[:loc] + markmap + lines[loc+1:]
+                lines = lines[:loc] + output + lines[loc+1:]
                 break
-                
+
             else:
                 done = True
 
