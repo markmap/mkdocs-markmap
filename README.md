@@ -73,8 +73,8 @@ plugins:
       encoding: utf-8
       file_extension: .mm.md
       d3_version: 7
-      lib_version: 0.15.3
-      view_version: 0.15.3
+      lib_version: 0.18
+      view_version: 0.18
 ```
 
 In addition, feel free to define your favourite source urls like this:
@@ -89,8 +89,8 @@ plugins:
 
 extra_javascript:
   - https://unpkg.com/d3@7/dist/d3.min.js
-  - https://unpkg.com/markmap-lib@0.15.3/dist/browser/index.js
-  - https://unpkg.com/markmap-view@0.15.3/dist/browser/index.js
+  - https://unpkg.com/markmap-lib@0.18/dist/browser/index.iife.js
+  - https://unpkg.com/markmap-view@0.18/dist/browser/index.js
 ```
 
 ## Troubleshooting
