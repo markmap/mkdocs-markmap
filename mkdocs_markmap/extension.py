@@ -49,8 +49,7 @@ class MarkmapPreprocessor(Preprocessor):
 
                 included_paths.append(path)
                 try:
-                    with open(path, "r", encoding=self.encoding) as r:
-                        markmap = r.read()
+                    markmap: str = path.read_text(encoding=self.encoding)
 
                 except Exception as e:
                     log.error("unable to include file {}. Ignoring statement. Error: {}".format(path, e))
