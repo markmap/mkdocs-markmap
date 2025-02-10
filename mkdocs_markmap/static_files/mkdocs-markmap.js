@@ -1,10 +1,12 @@
 (function initializeMarkmap() {
     const transformer = new markmap.Transformer();
-    const preloadAssets = transformer.getPreloadScripts();
+    const preloadScripts = transformer.plugins
+        .flatMap((plugin) => plugin.config?.preloadScripts || [])
+        .map((item) => transformer.resolveJS(item));
     const assets = transformer.getAssets();
     const loading = Promise.all([
         assets.styles && markmap.loadCSS(assets.styles),
-        markmap.loadJS([...preloadAssets.scripts, ...assets.scripts]),
+        markmap.loadJS([...preloadScripts, ...assets.scripts]),
     ]);
 
     function parseData(content) {
