@@ -1,6 +1,6 @@
 PACKAGE_NAME: str = "mkdocs_markmap"
 PROJECT_NAME: str = PACKAGE_NAME.replace("_", "-")
-PROJECT_VERSION: str = "2.5.0"
+PROJECT_VERSION: str = "2.5.1"
 
 OWNER: str = "neatc0der"
 ORGANISATION: str = "markmap"
