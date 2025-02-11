@@ -1,5 +1,5 @@
 PROJECT_NAME: str = "mkdocs_markmap"
-PROJECT_VERSION: str = "2.5.1"
+PROJECT_VERSION: str = "2.5.2"
 
 OWNER: str = "neatc0der"
 ORGANISATION: str = "markmap"
