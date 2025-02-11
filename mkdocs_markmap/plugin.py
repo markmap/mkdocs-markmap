@@ -121,7 +121,7 @@ class MarkmapPlugin(BasePlugin):
             code: Tag
             if markmap.name == "pre":
                 pre = markmap
-                code = markmap.findChild("code")
+                code = markmap.find("code")
             else:
                 pre = markmap.parent
                 code = markmap

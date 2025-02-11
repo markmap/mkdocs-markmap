@@ -2,7 +2,7 @@ import fnmatch
 import os
 import sys
 from pathlib import Path
-from typing import Dict, List
+from typing import List
 from urllib3.poolmanager import PoolManager
 from urllib3.response import HTTPResponse
 
@@ -10,7 +10,7 @@ from github import Github
 from github.GitRelease import GitRelease
 from github.Repository import Repository
 
-from mkdocs_markmap.__meta__ import PACKAGE_NAME, PROJECT_NAME, PROJECT_VERSION, REPOSITORY_NAME
+from mkdocs_markmap.__meta__ import PROJECT_NAME, PROJECT_VERSION, REPOSITORY_NAME
 
 
 PROJECT_PATH: Path = Path(__file__).parent.parent.parent.absolute()
@@ -18,7 +18,7 @@ DIST_PATH: Path = PROJECT_PATH / 'dist'
 CHANGELOG_PATH: Path = PROJECT_PATH / 'changelog'
 
 GZ_WILDCARD: str = f'{PROJECT_NAME}-{{version}}*.gz'
-WHL_WILDCARD: str = f'{PACKAGE_NAME}-{{version}}*.whl'
+WHL_WILDCARD: str = f'{PROJECT_NAME}-{{version}}*.whl'
 
 
 class GithubHandler(object):
